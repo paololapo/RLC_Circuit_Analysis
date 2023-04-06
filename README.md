@@ -31,28 +31,36 @@ dove $V_0=2$V è il valore iniziale della tensione (doppio rispetto a quanto sce
 L'analisi procede realizzando la regressione a due parametri dei dati secondo l'espressione data che restituisce i seguenti valori come stima dei parametri ignoti e delle loro incertezze.
 Per approfondire la bontà del fit si graficano gli scarti e la loro distribuzione. 
 
-Dall'andamento degli scarti ci si accorge innanzitutto che i dati sono altamente correlati, in quanto presentano delle regolarità che paiono seguire l'andamento ondulatorio della curva. Inoltre i primi dati sono notevolmente peggio rappresentati dalla curva di fit. 
+<p align="center">
+  <img src="images\image03.png" width="60%">
+  <img src="images\image04.png" width="33%">
+</p>
 
+Dall'andamento degli scarti ci si accorge innanzitutto che i dati sono altamente correlati, in quanto presentano delle regolarità che paiono seguire l'andamento ondulatorio della curva. Inoltre i primi dati sono notevolmente peggio rappresentati dalla curva di fit. 
 Questo secondo aspetto può essere dovuto in prima analisi da due fattori. In primis i dati di testa sono quelli con un'incertezza maggiore, data dal fattore di scala nella stima dell'errore, essendo quelli a voltaggio maggiore. In secondo luogo il segnale del canale in entrata non è costante (come invece era modellizzato essere) per la resistenza interna del generatore di funzioni. 
 
 La distribuzione degli scarti è fortemente assimetrica perchè risente dei dati iniziali e in generale il confronto tra questi e gli errori a priori è indice di una regressione tutt'altro che priva di limiti.
-
 Queste ipotesi vengono confermate dal calcolo del chi quadro, atteso essere circa pari alla cardinalità del dataset, che risulta invece essere di un'ordine di grandezza maggiore ( $\chi^2 = 22436$, $\chi^2_{\text{normalizzato}} = 9.27$). 
 
 Viene riportato il countor plot del $\chi^2$ che evidenzia l'atteso comportamento paraboloide. Si evidenzano le linee del livello del $\chi_{\text{min}}^2+1$, la cui proiezione sugli assi restituisce -come atteso- l'incertezza stimata dal programma, e del $\chi_{\text{min}}^2+2.3$ che è attesa raccogliere il $68\%$ della probabilità a due parametri. 
 
+<p align="center">
+  <img src="images\image05.png" width="40%">
+</p>
+
 Una possibile spiegazione del fenomeno è la sottostima dell'errore a priori. Questo era in media pari a $0.02V$ (e di simile mediana) mentre quello a posteriori è di $0.07V$.
-
 Tale confronto è limitato dal fatto che l'errore a priori sia composto da una componente di scala e una di offset, mentre quello a posteriori perde informazione su questa differenza. 
-
-
 Una prima ipotesi sul perchè di questo comportamento può essere data dalla scelta di utilizzare la stessa incertezza dei cursori ignorando possibili perdite di accuratezza date dal salvataggio automatico dei dati che potrebbe risentire di possibili mancanze di stabilità del segnale.
-
 
 Si procede ora a valutare ulteriori aspetti conducendo ulteriori analisi sul dataset.
 
 ### Curva smooth
-La sensibilità dell'oscilloscopio è tale per cui i dati siano discretizzati, nel senso che non è in grado di apprezzare le variazioni di segnale per ogni tempo e perciò la curva, analizzata in dettaglio, presenta in realtà un andamento a gradini. Questo comportamento è accentuato vicino a massimi e minimi, zone fondamentali per una buona regressione di un seno o di un coseno. \\
+La sensibilità dell'oscilloscopio è tale per cui i dati siano discretizzati, nel senso che non è in grado di apprezzare le variazioni di segnale per ogni tempo e perciò la curva, analizzata in dettaglio, presenta in realtà un andamento a gradini. Questo comportamento è accentuato vicino a massimi e minimi, zone fondamentali per una buona regressione di un seno o di un coseno.
+
+<p align="center">
+  <img src="images\image06.png" width="40%">
+</p>
+
 Si è dunque provato ad usare uno stratagemma per ovviare a questo problema realizzando artificialmente una curva più regolare attraverso la funzione `scipy.signal.savgol_filter` (usando come parametri finestre di lunghezza $35$ e polinomi di ordine $2$).
 Si riporta un dettaglio delle curve, nei pressi del primo minimo, nel quale si apprezza la discretizzazione del segnale, il processo di regolarizzazione e la totale ininfluenza nei risultati della regressione, confermata dalla stima dei parametri.
 
@@ -63,8 +71,12 @@ $V(t) = \alpha e^{-\delta t}\sin(\beta t + \gamma) + ϵ$
 
 del quale si riporta il grafico e la visualizzazione degli scarti.
 
+<p align="center">
+  <img src="images\image07_1.png" width="60%">
+  <img src="images\image08.png" width="33%">
+</p>
 
-Il chi quadro di questa regressione è $\chi^2 = 241$, estremamente buono, come preventivato dall'osservazione degli scarti.  É interessante come la maggior parte di questi siano maggior di zero e che questo fenomeno sia verificato lungo tutta la curva. Inoltre appaiono meno correlati. 
+Il chi quadro di questa regressione è $\chi^2 = 241$, estremamente buono, come preventivato dall'osservazione degli scarti. É interessante come la maggior parte di questi siano maggior di zero e che questo fenomeno sia verificato lungo tutta la curva. Inoltre appaiono meno correlati. 
 
 Una possibile spiegazione è che il modello, ricavato per il circuito ideale, non sia perfettamente generalizzabile al caso reale seppure quest'ultimo mantenga le caratteristiche di un oscillatore armonico smorzato. Al costo di complicare notevolmente lo schema del circuito è dunque atteso che si possa meglio modellizzare il fenomeno effettivo.
 
