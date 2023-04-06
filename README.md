@@ -2,9 +2,20 @@
 Here's a part of the analysis done for the laboratory class in 2022. It deals with: quantifying errors and uncertainty in physical measurements, nonlinear regressions with residual analysis, chi-square and its relationship with probability, and more statistical tools.
 I apologize, but the following text will be in Italian. Perhaps in the future I will update and translate it, perhaps making some improvements to the images.
 
+## Contenuti e apparato
+1. [RLC nel tempo](#RLC_nel_tempo)
+   * [Fit da modello](#RCL_t_1)
+   * [Curva smooth](#RCL_t_2)
+   * [Fit pentaparametrico](#RCL_t_3)
+   * [Minuit](#RCL_t_4)
+2. [RLC in frequenza](#RLC_in_frequenza)
+    * [Fit da modello](#RCL_f_1)
+    * [Chi quadro e probabilità](#RCL_f_2)
+    * [Toy sets e simulazione](#RCL_f_3)
+
 L'apparato strumentale consiste in un generatore di funzioni *Tektronix AFG1022*, un oscilloscopio digitale *Tektronix TBS 1102B* e una breadboard con annesse resistenze, capacità e induttanze. L'oscilloscopio è collegato al circuito attraverso delle sonde di compensazione $10X$, dotate di impedenza $\times 10$ e attenuazione di $1/10$. Le componenti sono state scelte affinchè il fenomeno fisico da studiare fosse prevalente rispetto a rumore e aspetti secondari.
 
-## RLC nel tempo: oscillatore armonico smorzato
+## RLC nel tempo: oscillatore armonico smorzato <a name="RLC_nel_tempo"></a>
 In questa sezione analizziamo il circuito attraverso lo strumento della regressione non lineare, dopo aver preventivamente scaricato i dati dall'oscilloscopio. Il dataset utilizzato consta di $2423$ triple che descrivono il segnale del canale $1$ e $2$ al tempo $t$. In particolare sono maggiormente significativi i dati relativi al secondo canale, quello in uscita. Le misure sono state prese ai capi dell'induttanza.
 
 L'incertezza associata ai valori è la stessa utilizzata per le misure tramite cursori.
@@ -21,7 +32,7 @@ $\sigma_t = 0.04\text{div}$.
   <img src="images\image02_1.png" width="30%">
 </p>
 
-### Fit da modello
+### Fit da modello <a name="RCL_t_1"></a>
 Dall'analisi del circuito si ricava un'espressione analatica per il voltaggio atteso ai capi dell'induttanza che risulta essere
 
 $V(t) = V_0\frac{e^{-\delta t}}{\sqrt{\Omega^2-\delta^2}}\left(\sqrt{\Omega^2-\delta^2}\cos(t\sqrt{\Omega^2-\delta^2})-\delta\sin(t\sqrt{\Omega^2-\delta^2})\right)$
@@ -54,7 +65,7 @@ Una prima ipotesi sul perchè di questo comportamento può essere data dalla sce
 
 Si procede ora a valutare ulteriori aspetti conducendo ulteriori analisi sul dataset.
 
-### Curva smooth
+### Curva smooth <a name="RCL_t_2"></a>
 La sensibilità dell'oscilloscopio è tale per cui i dati siano discretizzati, nel senso che non è in grado di apprezzare le variazioni di segnale per ogni tempo e perciò la curva, analizzata in dettaglio, presenta in realtà un andamento a gradini. Questo comportamento è accentuato vicino a massimi e minimi, zone fondamentali per una buona regressione di un seno o di un coseno.
 
 <p align="center">
@@ -64,7 +75,7 @@ La sensibilità dell'oscilloscopio è tale per cui i dati siano discretizzati, n
 Si è dunque provato ad usare uno stratagemma per ovviare a questo problema realizzando artificialmente una curva più regolare attraverso la funzione `scipy.signal.savgol_filter` (usando come parametri finestre di lunghezza $35$ e polinomi di ordine $2$).
 Si riporta un dettaglio delle curve, nei pressi del primo minimo, nel quale si apprezza la discretizzazione del segnale, il processo di regolarizzazione e la totale ininfluenza nei risultati della regressione, confermata dalla stima dei parametri.
 
-### Fit pentaparametrico
+### Fit pentaparametrico <a name="RCL_t_3"></a>
 Con l'obiettivo di testare l'accuratezza del modello teorico si è provato a parametrizzare la curva sulla base della soluzione più generale possibile per il problema dell'oscillatore armonico smorzato, omettendo dunque le informazioni sul sistema fisico in questione. Si tratta dunque di una regressione a cinque parametri del tipo
 
 $V(t) = \alpha e^{-\delta t}\sin(\beta t + \gamma) + ϵ$
@@ -80,12 +91,12 @@ Il chi quadro di questa regressione è $\chi^2 = 241$, estremamente buono, come 
 
 Una possibile spiegazione è che il modello, ricavato per il circuito ideale, non sia perfettamente generalizzabile al caso reale seppure quest'ultimo mantenga le caratteristiche di un oscillatore armonico smorzato. Al costo di complicare notevolmente lo schema del circuito è dunque atteso che si possa meglio modellizzare il fenomeno effettivo.
 
-### Minuit
+### Minuit <a name="RCL_t_4"></a>
 In breve si cita il fatto che i risultati della regressione a due parametri sopra descritti sono robusti rispetto al cambio di algoritmo verso `Minuit` utilizzato per minimizzare i minimi quadrati.
 
 Si è utilizzata l'apposita libreria che simula il codice di Root.
 
-## RLC in frequenza: curva di risonanza
+## RLC in frequenza: curva di risonanza <a name="RLC_in_frequenza"></a>
 In questa sezione ci occuperemo di analizzare il comportamento della funzione di trasferimento al variare della frequenza dell'onda in entrata. Il dataset consta di 31 triple di dati che rappresentano frequenza, tensione in ingresso e tensione in uscita dal circuito. Le misure sono state prese ai capi della resistenza.
 
 Per la tensione in ingresso si è utilizzato un fondoscala di $500mV/div$ mentre per la tensione in uscita di $100mV/div$. Anche in questo caso si trascura l'errore sulla frequenza emessa dal generatore.
@@ -94,7 +105,7 @@ Per la tensione in ingresso si è utilizzato un fondoscala di $500mV/div$ mentre
   <img src="images\image10.png" width="40%">
 </p>
 
-### Fit da modello
+### Fit da modello <a name="RCL_f_1"></a>
 
 Si definisce l'amplificazione, o funzione di trasferimento, del segnale come il rapporto tra la tensione in uscita e quella in ingresso, con le dovute correzioni di scala
 $T_V(f) = \frac{k_{out}V_{out}}{k_{in}V_{in}} $ 
@@ -117,7 +128,7 @@ Si noti che, almeno per gli ultimi due parametri, si dispone di una stima data d
 
 Dall'andamento e dalla distribuzione degli scarti si osserva come tutti i valori siano abbondantemente all'interno dell'errore a priori. Il $\chi^2$ a 28 gradi di libertà ($3$ i vincoli) è pari a $2.87$, sufficientemente basso da far sospettare una sovrastima dell'incertezza. Tale risultato potrebbe essere frutto delle diverse divisioni di $V_{in}$ e $V_{out}$ e all'errata semplificazione dei due fattori di scala. Per procedere in tal senso si potrebbe calcolare un errore a posteriori che porti il $\chi^2$ al valore atteso tramite un parametro moltiplicativo $k$.
 
-### $\chi^2$ e probabilità
+### $\chi^2$ e probabilità <a name="RCL_f_2"></a>
 In analogia a quanto fatto per la regressione non lineare nel dominio del tempo si è graficato l'andamento del $\chi^2$ in prossimità del best fit.
 
 <p align="center">
@@ -139,7 +150,7 @@ Il fatto che vi sia una differenza rispetto a quanto atteso può essere dovuto a
 Semplicemente sommando i valori della griglia rispetto ad un asse si ottiene la proiezione della curva rispetto ad un parametro. Qualitativamente si ritrova l'andamento gaussiano atteso.
 Per valutare se all'interno del $\pm \sigma$ dato dalla regressione vi sia la probabilità attesa non si è effettuato un ulteriore fit ma si si sono semplicemente sommati i bin nel range in analisi. Tale procedimento non è forse perfettamente rigoroso (seppur dotato di senso data la normalizzazione) ma fornisce una buona prima stima di quanto cercato. In questo contesto è chiaro cosa fare per corregge il range dei $2\sigma$ che contiene (in teoria) solo il $95\%$ della probabilità (la proporzione la si è fatta a posteriori, i grafici mostrano la proiezione grezza della pdf della sottosezione procedente sugli assi).
 
-### Toy set e simulazione
+### Toy sets e simulazione <a name="RCL_f_3"></a>
 
 Come ultima verifica per il coverage del $68\%$ dell'ellissse definita dal $\Delta\chi^2<2.3$ si è effettuato un processo di bagging. Nel caso specifico sono stati generati $10^5$ pseudo-dataset (*toy*) rigenerando i valori per il fit in modo tale che ogni punto avesse una distribuzione gaussiana centrata sul dato sperimentale e con una deviazione standard uguale a quella assegnata a priori. Assegnando a questi punti gli stessi errori usati in precedenza si ripete per ogni toy set il fit e si osserva la distribuzione dei parametri ottenuti. 
 
