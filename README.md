@@ -16,6 +16,11 @@ $\sigma_V = 0.04 \text{div} \oplus 1.5\%k$.
 Incertezza sui tempi come solo termine casuale:
 $\sigma_t = 0.04\text{div}$.
 
+<p align="center">
+  <img src="images\image01.png" width="60%">
+  <img src="images\image02_1.png" width="30%">
+</p>
+
 ### Fit da modello
 Dall'analisi del circuito si ricava un'espressione analatica per il voltaggio atteso ai capi dell'induttanza che risulta essere
 
