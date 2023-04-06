@@ -2,17 +2,6 @@
 Here's a part of the analysis done for the laboratory class in 2022. It deals with: quantifying errors and uncertainty in physical measurements, nonlinear regressions with residual analysis, chi-square and its relationship with probability, and more statistical tools.
 I apologize, but the following text will be in Italian. Perhaps in the future I will update and translate it, perhaps making some improvements to the images.
 
-## Contenuti e apparato
-1. [RLC nel tempo](#RLC_nel_tempo)
-   * [Fit da modello](#RCL_t_1)
-   * [Curva smooth](#RCL_t_2)
-   * [Fit pentaparametrico](#RCL_t_3)
-   * [Minuit](#RCL_t_4)
-2. [RLC in frequenza](#RLC_in_frequenza)
-    * [Fit da modello](#RCL_f_1)
-    * [Chi quadro e probabilità](#RCL_f_2)
-    * [Toy sets e simulazione](#RCL_f_3)
-
 L'apparato strumentale consiste in un generatore di funzioni *Tektronix AFG1022*, un oscilloscopio digitale *Tektronix TBS 1102B* e una breadboard con annesse resistenze, capacità e induttanze. L'oscilloscopio è collegato al circuito attraverso delle sonde di compensazione $10X$, dotate di impedenza $\times 10$ e attenuazione di $1/10$. Le componenti sono state scelte affinchè il fenomeno fisico da studiare fosse prevalente rispetto a rumore e aspetti secondari.
 
 ## RLC nel tempo: oscillatore armonico smorzato <a name="RLC_nel_tempo"></a>
