@@ -17,8 +17,8 @@ Incertezza sui tempi come solo termine casuale:
 $\sigma_t = 0.04\text{div}$.
 
 <p align="center">
-  <img src="images\image01.png" width="60%">
-  <img src="images\image02_1.png" width="30%">
+  <img src="images/image01.png" width="60%">
+  <img src="images/image02_1.png" width="30%">
 </p>
 
 ### Fit da modello <a name="RCL_t_1"></a>
@@ -32,8 +32,8 @@ L'analisi procede realizzando la regressione a due parametri dei dati secondo l'
 Per approfondire la bontà del fit si graficano gli scarti e la loro distribuzione. 
 
 <p align="center">
-  <img src="images\image03.png" width="60%">
-  <img src="images\image04.png" width="33%">
+  <img src="images/image03.png" width="60%">
+  <img src="images/image04.png" width="33%">
 </p>
 
 Dall'andamento degli scarti ci si accorge innanzitutto che i dati sono altamente correlati, in quanto presentano delle regolarità che paiono seguire l'andamento ondulatorio della curva. Inoltre i primi dati sono notevolmente peggio rappresentati dalla curva di fit. 
@@ -45,12 +45,12 @@ Queste ipotesi vengono confermate dal calcolo del chi quadro, atteso essere circ
 Viene riportato il countor plot del $\chi^2$ che evidenzia l'atteso comportamento paraboloide. Si evidenzano le linee del livello del $\chi_{\text{min}}^2+1$, la cui proiezione sugli assi restituisce -come atteso- l'incertezza stimata dal programma, e del $\chi_{\text{min}}^2+2.3$ che è attesa raccogliere il $68\%$ della probabilità a due parametri. 
 
 <p align="center">
-  <img src="images\image05.png" width="40%">
+  <img src="images/image05.png" width="40%">
 </p>
 
 Una possibile spiegazione del fenomeno è la sottostima dell'errore a priori. Questo era in media pari a $0.02V$ (e di simile mediana) mentre quello a posteriori è di $0.07V$.
 Tale confronto è limitato dal fatto che l'errore a priori sia composto da una componente di scala e una di offset, mentre quello a posteriori perde informazione su questa differenza. 
-Una prima ipotesi sul perchè di questo comportamento può essere data dalla scelta di utilizzare la stessa incertezza dei cursori ignorando possibili perdite di accuratezza date dal salvataggio automatico dei dati che potrebbe risentire di possibili mancanze di stabilità del segnale.
+Una prima ipotesi sul perché di questo comportamento può essere data dalla scelta di utilizzare la stessa incertezza dei cursori ignorando possibili perdite di accuratezza date dal salvataggio automatico dei dati che potrebbe risentire di possibili mancanze di stabilità del segnale.
 
 Si procede ora a valutare ulteriori aspetti conducendo ulteriori analisi sul dataset.
 
@@ -58,7 +58,7 @@ Si procede ora a valutare ulteriori aspetti conducendo ulteriori analisi sul dat
 La sensibilità dell'oscilloscopio è tale per cui i dati siano discretizzati, nel senso che non è in grado di apprezzare le variazioni di segnale per ogni tempo e perciò la curva, analizzata in dettaglio, presenta in realtà un andamento a gradini. Questo comportamento è accentuato vicino a massimi e minimi, zone fondamentali per una buona regressione di un seno o di un coseno.
 
 <p align="center">
-  <img src="images\image06.png" width="40%">
+  <img src="images/image06.png" width="40%">
 </p>
 
 Si è dunque provato ad usare uno stratagemma per ovviare a questo problema realizzando artificialmente una curva più regolare attraverso la funzione `scipy.signal.savgol_filter` (usando come parametri finestre di lunghezza $35$ e polinomi di ordine $2$).
@@ -72,8 +72,8 @@ $V(t) = \alpha e^{-\delta t}\sin(\beta t + \gamma) + ϵ$
 del quale si riporta il grafico e la visualizzazione degli scarti.
 
 <p align="center">
-  <img src="images\image07_1.png" width="60%">
-  <img src="images\image08.png" width="33%">
+  <img src="images/image07_1.png" width="60%">
+  <img src="images/image08.png" width="33%">
 </p>
 
 Il chi quadro di questa regressione è $\chi^2 = 241$, estremamente buono, come preventivato dall'osservazione degli scarti. É interessante come la maggior parte di questi siano maggior di zero e che questo fenomeno sia verificato lungo tutta la curva. Inoltre appaiono meno correlati. 
@@ -91,7 +91,7 @@ In questa sezione ci occuperemo di analizzare il comportamento della funzione di
 Per la tensione in ingresso si è utilizzato un fondoscala di $500mV/div$ mentre per la tensione in uscita di $100mV/div$. Anche in questo caso si trascura l'errore sulla frequenza emessa dal generatore.
 
 <p align="center">
-  <img src="images\image10.png" width="40%">
+  <img src="images/image10.png" width="40%">
 </p>
 
 ### Fit da modello <a name="RCL_f_1"></a>
@@ -111,8 +111,8 @@ Si effettua dunque una regressione a tre parametri per stimare i valori di $A$, 
 Si noti che, almeno per gli ultimi due parametri, si dispone di una stima data dalla conoscenza delle componenti del circuito. Questo è fondamentale per indirizzare, assegnando dei valori iniziali, l'algoritmo che effettua la minimizzazione della funzione di costo.
 
 <p align="center">
-  <img src="images\image11.png" width="40%">
-  <img src="images\image12.png" width="30%">
+  <img src="images/image11.png" width="40%">
+  <img src="images/image12.png" width="30%">
 </p>
 
 Dall'andamento e dalla distribuzione degli scarti si osserva come tutti i valori siano abbondantemente all'interno dell'errore a priori. Il $\chi^2$ a 28 gradi di libertà ($3$ i vincoli) è pari a $2.87$, sufficientemente basso da far sospettare una sovrastima dell'incertezza. Tale risultato potrebbe essere frutto delle diverse divisioni di $V_{in}$ e $V_{out}$ e all'errata semplificazione dei due fattori di scala. Per procedere in tal senso si potrebbe calcolare un errore a posteriori che porti il $\chi^2$ al valore atteso tramite un parametro moltiplicativo $k$.
@@ -121,9 +121,9 @@ Dall'andamento e dalla distribuzione degli scarti si osserva come tutti i valori
 In analogia a quanto fatto per la regressione non lineare nel dominio del tempo si è graficato l'andamento del $\chi^2$ in prossimità del best fit.
 
 <p align="center">
-  <img src="images\image13.png" width="28.5%">
-  <img src="images\image14.png" width="30%">
-  <img src="images\image15.png" width="30.5%">
+  <img src="images/image13.png" width="28.5%">
+  <img src="images/image14.png" width="30%">
+  <img src="images/image15.png" width="30.5%">
 </p>
 
 Essendo $3$ i parametri è stato oppurtuno profilare il $\chi^2$ scegliendo per ogni valore delle variabili sugli assi il minimo $\chi^2$ che si ottiene facendo variare il terzo parametro.
@@ -146,7 +146,7 @@ Come ultima verifica per il coverage del $68\%$ dell'ellissse definita dal $\Del
 Qualitativamente si osserva come gli istogrammi 2d plottati non siano troppo dissimili a quanto fosse atteso. Resta da valutare la frazione dei set appena generati che danno parametri contenuti nell'ellisse. 
 
 <p align="center">
-  <img src="images\image16_1.png" width="90%">
+  <img src="images/image16_1.png" width="90%">
 </p>
 
 Tale operazione, seppure concettualmente chiara, non è elementare perchè passa per la parametrizzazione di ellissi roto-traslate. Innanzitutto non sono noti i semiassi dell'ellisse, nè la loro proiezione sugli assi (lo sono invece nel caso del $\Delta\chi^2<1$, le incertezze $\sigma$ dei parametri). Assunta la regolarità del paraboloide del $\chi^2$ nei pressi del minimo i semiassi cercati devono essere pari a $\alpha\sigma$ per qualche parametro di scala $\alpha$. Facendo variare tale parametro sul grafico del $\chi^2$ si è giunti alla stima ragionevole di $\alpha=1.55$, senza però riuscire ad associarvi un significato statistico che invece sicuramente ha. 
